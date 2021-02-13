@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet,Image, View, Text, TouchableOpacity } from "react-native";
 
 export const AlbumView = ({ item, onPress }) => {
     return (
         <TouchableOpacity
-            style={{ width: '50%' }}
+        style={{       width:'50%'}}
             onPress={() => onPress()}>
             <View style={styles.rightContainerlist}>
                 <Image
