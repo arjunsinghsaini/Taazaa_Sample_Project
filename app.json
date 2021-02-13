@@ -1,0 +1,12 @@
+{
+  "name": "taazaa-sample-project",
+  "displayName": "taazaa-sample-project",
+  "expo": {
+    "name": "taazaa-sample-project",
+    "slug": "taazaa-sample-project",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
