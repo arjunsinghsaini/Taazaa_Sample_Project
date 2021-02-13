@@ -27,12 +27,17 @@ export default class HomePage extends Component {
             <View style={styles.container}>
                 <FlatList
                     numColumns={2}
-                    style={{ marginHorizontal: 10, }}
+                    style={{ marginVertical:10}}
                     showsVerticalScrollIndicator={false}
                     data={this.state.albumList}
                     keyExtractor={(item, index) => item.trackId}
                     renderItem={({ item }) => <AlbumView
                         item={item}
+                        onPress={()=>{
+                            this.props.navigation.navigate('AlbumDetail',{
+                                'album':item
+                            })
+                        }}
                     />}
                 />
             </View>
