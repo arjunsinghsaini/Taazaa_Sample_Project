@@ -1,6 +1,6 @@
 import { NetworkManager } from '../utils/index'
 import React, { Component } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native'
 import { apis } from '../../res/URL';
 import AlbumView from '../components/AlbumView'
 import { getAlbumList, saveAlbums } from '../database/RealmManager'
@@ -11,24 +11,26 @@ export default class HomePage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            albumList: []
+            albumList: [],
+            loading: false
         }
     }
 
     apiHandler = async () => {
         NetInfo.fetch().then(async state => {
             if (state.isConnected) {
+                this.setState({ loading: true })
                 const res = await NetworkManager.networkManagerInstance.fetchRequest(apis.ALBUM_LIST, apis.getRequest)
-                this.setState({ albumList: res.results })
-                res.results.sort((a,b) => (a.trackId > b.trackId) ? 1 : ((b.trackId > a.trackId) ? -1 : 0))
+                this.setState({ albumList: res.results, loading: false })
+                res.results.sort((a, b) => (a.trackId > b.trackId) ? 1 : ((b.trackId > a.trackId) ? -1 : 0))
                 if (res.results.length > 0)
                     saveAlbums(res.results)
 
             } else {
-              getAlbumList().then((listing)=>{
-                listing.sort((a,b) => (a.trackId > b.trackId) ? 1 : ((b.trackId > a.trackId) ? -1 : 0))
-                this.setState({ albumList: listing })
-             });
+                getAlbumList().then((listing) => {
+                    listing.sort((a, b) => (a.trackId > b.trackId) ? 1 : ((b.trackId > a.trackId) ? -1 : 0))
+                    this.setState({ albumList: listing })
+                });
             }
         });
     }
@@ -55,6 +57,13 @@ export default class HomePage extends Component {
                         }}
                     />}
                 />
+                {
+                    this.state.loading && <ActivityIndicator
+                        color='#bc2b78'
+                        size="large"
+                        style={styles.activityIndicator} />
+                }
+
             </View>
         )
     };
@@ -63,6 +72,7 @@ export default class HomePage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height:'100%',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -82,4 +92,16 @@ const styles = StyleSheet.create({
         alignSelf: "flex-start",
         marginBottom: 5,
     },
+    activityIndicator: {
+        position: 'absolute',
+        left: 0,
+        height:'100%',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.20)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+    }
 });
